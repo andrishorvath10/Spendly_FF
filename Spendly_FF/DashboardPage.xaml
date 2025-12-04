@@ -1,0 +1,82 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Spendly.ViewModels"
+             x:Class="Spendly.Views.DashboardPage"
+             Title="Dashboard">
+
+    <ContentPage.BindingContext>
+        <vm:DashboardViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="15">
+
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto" ColumnSpacing="15">
+
+                <Frame Grid.Column="0" Padding="15" CornerRadius="8" BackgroundColor="#F8D7DA">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Havi Kiadások" FontSize="Small" TextColor="#721c24" />
+                        <Label Text="{Binding TotalExpenses, StringFormat='{0:N0} Ft'}" 
+                               FontSize="Title" 
+                               FontAttributes="Bold" 
+                               TextColor="#721c24" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Column="1" Padding="15" CornerRadius="8" BackgroundColor="#D4EDDA">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Havi Bevételek" FontSize="Small" TextColor="#155724" />
+                        <Label Text="{Binding TotalIncome, StringFormat='{0:N0} Ft'}" 
+                               FontSize="Title" 
+                               FontAttributes="Bold" 
+                               TextColor="#155724" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <VerticalStackLayout Spacing="10" Padding="0, 10, 0, 0">
+                <Label Text="Havi Keret Állapot" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="150.000 Ft maradt 300.000 Ft-ból (50%)" FontSize="Small" TextColor="Gray" />
+                <ProgressBar Progress="0.5" ProgressColor="Blue" HeightRequest="10" />
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="LightGray" />
+
+            <Label Text="Legutóbbi Tranzakciók" FontSize="Medium" FontAttributes="Bold" />
+
+            <CollectionView ItemsSource="{Binding LatestTransactions}">
+                <CollectionView.EmptyView>
+                    <Label Text="Nincsenek tranzakciók ebben a hónapban." HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="5" ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                            <Label Grid.Column="0" Grid.Row="0" Text="{Binding Category.Name}" FontAttributes="Bold" />
+                            <Label Grid.Column="0" Grid.Row="1" Text="{Binding Notes}" FontSize="Small" TextColor="Gray" />
+
+                            <Label Grid.Column="1" 
+                                   Grid.RowSpan="2"
+                                   Text="{Binding Amount, StringFormat='{0:N0} Ft'}" 
+                                   FontSize="Large"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   TextColor="{Binding Amount, Converter={StaticResource AmountToColorConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Új" 
+                     Command="{Binding GoToNewTransactionCommand}"
+                     IconImageSource="plus.png" />
+
+        <ToolbarItem Text="Megosztás" 
+                     Command="{Binding ShareMonthlyReportCommand}"
+                     IconImageSource="share.png" />
+    </ContentPage.ToolbarItems>
+</ContentPage>

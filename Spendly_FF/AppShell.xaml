@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Spendly.Views"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate local:DashboardPage}" Route="Dashboard" />
+    <ShellContent Title="Tranzakciók" ContentTemplate="{DataTemplate local:TransactionListPage}" Route="TransactionList" />
+
+    <Shell.FlyoutContent>
+        <ShellContent Route="TransactionEditor" 
+                      ContentTemplate="{DataTemplate local:TransactionEditorPage}" 
+                      FlyoutItemIsVisible="False" />
+    </Shell.FlyoutContent>
+
+</Shell>

@@ -1,0 +1,56 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Spendly.ViewModels"
+             x:Class="Spendly.Views.TransactionListPage"
+             Title="Tranzakcióim">
+
+    <ContentPage.BindingContext>
+        <vm:TransactionListViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout>
+
+        <HorizontalStackLayout Spacing="10" Padding="10">
+            <Entry Placeholder="Keresés megjegyzésben"
+                   Text="{Binding SearchText, Mode=TwoWay}"
+                   HorizontalOptions="FillAndExpand" />
+
+            <Picker Title="Szűrés kategóriára"
+                    ItemsSource="{Binding AvailableCategories}"
+                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                    ItemDisplayBinding="{Binding Name}"
+                    WidthRequest="150" />
+        </HorizontalStackLayout>
+
+        <CollectionView ItemsSource="{Binding FilteredTransactions}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedTransaction}"
+                        Command="{Binding SelectTransactionCommand}"
+                        HorizontalOptions="FillAndExpand">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" ColumnDefinitions="Auto, *, Auto">
+                        <Label Grid.Column="0" Text="{Binding Category.Name}" FontSize="Medium" VerticalOptions="Center" />
+
+                        <StackLayout Grid.Column="1" Margin="10, 0, 0, 0">
+                            <Label Text="{Binding Notes}" FontSize="Small" TextColor="Gray" />
+                            <Label Text="{Binding DateUtc, StringFormat='{0:yyyy. MM. dd.}'}" FontSize="Small" />
+                        </StackLayout>
+
+                        <Label Grid.Column="2" 
+                               Text="{Binding Amount, StringFormat='{0:N2} Ft'}" 
+                               FontSize="Large" 
+                               FontAttributes="Bold"
+                               TextColor="{Binding Amount, Converter={StaticResource AmountToColorConverter}}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Új" 
+                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DashboardViewModel}}, Path=GoToNewTransactionCommand}" />
+    </ContentPage.ToolbarItems>
+</ContentPage>

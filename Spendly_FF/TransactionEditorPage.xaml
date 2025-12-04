@@ -1,0 +1,44 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Spendly.ViewModels"
+             x:Class="Spendly.Views.TransactionEditorPage"
+             Title="Tranzakció Felvitele">
+
+    <ContentPage.BindingContext>
+        <vm:TransactionEditorViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <Label Text="Összeg:" FontSize="Medium"/>
+            <Entry Placeholder="Összeg" Keyboard="Numeric"
+                   Text="{Binding CurrentTransaction.Amount, Mode=TwoWay}" />
+
+            <Label Text="Dátum:" FontSize="Medium"/>
+            <DatePicker Date="{Binding CurrentTransaction.DateUtc, Mode=TwoWay}" 
+                        Format="yyyy. MM. dd." />
+
+            <Label Text="Kategória:" FontSize="Medium"/>
+            <Picker Title="Válassz Kategóriát"
+                    ItemsSource="{Binding AvailableCategories}"
+                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                    ItemDisplayBinding="{Binding Name}" />
+
+            <Label Text="Megjegyzés:" FontSize="Medium"/>
+            <Entry Text="{Binding CurrentTransaction.Notes, Mode=TwoWay}" 
+                   Placeholder="Megjegyzés" />
+
+            <Button Text="Blokk Fotózása" Command="{Binding TakeReceiptPhotoCommand}" />
+
+            <Image Source="{Binding CurrentTransaction.ReceiptImagePath}" 
+                   HeightRequest="200" Aspect="AspectFit" />
+
+            <Button Text="Mentés"
+                    Command="{Binding SaveTransactionCommand}"
+                    BackgroundColor="Green"
+                    Margin="0, 30, 0, 0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
